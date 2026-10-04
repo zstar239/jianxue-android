@@ -1,0 +1,29 @@
+[package]
+name = "jianxue-android"
+version = "0.2.0-dev"
+edition = "2024"
+license = "GPL-3.0-or-later"
+
+[lib]
+name = "jianxue"
+crate-type = ["cdylib", "rlib"]
+
+[workspace]
+
+[dependencies]
+jni = "0.21.1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+qingjian-core = { path = "../vendor/qingjian/crates/qingjian-core" }
+qingjian-dictionary = { path = "../vendor/qingjian/crates/qingjian-dictionary" }
+qingjian-learning = { path = "../vendor/qingjian/crates/qingjian-learning" }
+qingjian-translate = { path = "../vendor/qingjian/crates/qingjian-translate" }
+qingjian-lm = { path = "../vendor/qingjian/crates/qingjian-lm" }
+qingjian-format = { path = "../vendor/qingjian/crates/qingjian-format" }
+qingjian-neural = { path = "../vendor/qingjian/crates/qingjian-neural" }
+qingjian-predict = { path = "../vendor/qingjian/crates/qingjian-predict" }
+
+[profile.release]
+lto = "thin"
+strip = "debuginfo"
+codegen-units = 1

@@ -1,0 +1,15 @@
+.gradle/
+**/build/
+**/target/
+local.properties
+.idea/
+*.iml
+app/src/main/jniLibs/
+dist/
+vendor/qingjian/data/
+vendor/qingjian/target/
+*.jks
+*.keystore
+third-party/rust/
+__pycache__/
+*.pyc

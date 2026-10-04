@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">简学输入法</string>
+    <string name="subtype_name">中文 · 拼音与译词</string>
+    <string name="key_height_label">按键高度 · %1$d dp</string>
+</resources>
