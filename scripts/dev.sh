@@ -22,7 +22,7 @@ export PATH="$JAVA_HOME/bin:$CARGO_HOME/bin:$tool_dir/gradle/bin:$PATH"
 [[ -z "${HTTP_PROXY:-}" ]] && unset HTTP_PROXY
 [[ -z "${HTTPS_PROXY:-}" ]] && unset HTTPS_PROXY
 case "${1:-}" in
-    apk|android|check|jvm|emulator|vendor-dependencies)
+    apk|android|release|release-check|check|jvm|emulator|vendor-dependencies)
         mkdir -p "$tool_dir"
         exec > >(tee "$tool_dir/run-${1}.log") 2>&1
         ;;
@@ -149,6 +149,13 @@ case "${1:-help}" in
     cp app/build/outputs/apk/debug/app-debug.apk dist/jianxue-debug.apk.next
     mv -f dist/jianxue-debug.apk.next dist/jianxue-debug.apk
     ;;
+  release)
+    python3 scripts/build-release.py
+    ;;
+  release-check)
+    gradle --no-daemon :app:assembleRelease :app:testReleaseUnitTest :app:lintRelease
+    python3 scripts/verify-artifacts.py app/build/outputs/apk/release/app-release-unsigned.apk --output dist/release-build-verification.json
+    ;;
   jvm)
     cargo build --manifest-path native/Cargo.toml --lib
     mkdir -p "$tool_dir/jvm-smoke"
@@ -251,5 +258,5 @@ case "${1:-help}" in
     cargo clippy --manifest-path native/Cargo.toml --all-targets -- -D warnings
     bash scripts/dev.sh test
     ;;
-  *) echo '用法：bash scripts/dev.sh setup|test|native|apk|check|inspect <项目内路径>';;
+  *) echo '用法：bash scripts/dev.sh setup|test|native|apk|release|release-check|check|inspect <项目内路径>';;
 esac

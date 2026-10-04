@@ -191,7 +191,7 @@ public final class SettingsActivity extends Activity {
         paragraph("先在应用中选中文字，再点键盘上的「译」。译文显示后，点击译文替换原选区；移动选区会取消本次翻译。所选文字最多 2000 字，会发送给已配置的服务商。");
     }
     private void about() {
-        title("简学输入法 0.2.0-dev");
+        title("简学输入法 0.2.0");
         paragraph("独立的 Android 开源移植，复用 Qingjian 的 Rust 输入引擎、词库与译词数据。此应用不代表青简官方，不使用青简名称或 logo 作为品牌。");
         button("查看上游开源项目", () -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/qingjian-team/qingjian"))));
         title("开源许可");

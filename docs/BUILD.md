@@ -47,3 +47,23 @@ python3 scripts/package-source.py
 打包脚本排除构建缓存、Git 元数据、签名密钥、个人设置、已下载的产品包和 APK，保留 Android/Rust 代码、锁文件、完整上游源码、资源来源文档、TLS 补丁、GPL 许可、构建脚本与 Rust 第三方源码。源码包内提供 Cargo 离线依赖配置；正式二进制数据通过固定校验值重新下载。
 
 开发 APK 使用调试签名，供安装测试。正式发布需要维护者自行管理发布签名、版本号及升级策略，不要提交签名密钥。
+
+## 正式 Release 构建
+
+首次发布前创建并备份本地发布密钥；后续使用同一份密钥：
+
+```bash
+python3 scripts/create-release-key.py
+bash scripts/dev.sh release
+python3 scripts/package-source.py
+```
+
+密钥与配置保存在已忽略的 `.release-signing/`，不进入仓库、源码包或 Release 附件。请离线备份整个目录；可用 `JIANXUE_SIGNING_DIR` 指向已有备份。创建脚本保留现有密钥，文件不完整时停止，避免意外改变签名。
+
+也可自行通过环境变量提供 `JIANXUE_RELEASE_KEYSTORE`、`JIANXUE_RELEASE_STORE_PASSWORD`、`JIANXUE_RELEASE_KEY_ALIAS` 和 `JIANXUE_RELEASE_KEY_PASSWORD`；不要把凭据写入构建配置或提交到 Git。
+
+`release` 构建两种 ABI，运行 Release Java 单元测试和 lint，输出 `dist/jianxue-<版本>-release.apk`。脚本核验实际 APK 的包名、版本号、关闭调试、签名证书和 16 KB 对齐。没有发布签名时停止，不使用调试证书兜底。`dist/release-signature.txt` 和 `dist/release-verification.json` 只记录公开证书与检查结果。
+
+CI 不持有维护者私钥；`release-check` 验证未签名 Release 编译、单元测试、lint 和原生库布局。GitHub Release 只分发维护者签名的正式 APK，CI 不上传调试 APK。
+
+0.2.0 的正式签名与先前调试版不同，首次迁移前导出需要保留的生词并卸载调试版，再安装正式版。之后继续保留同一份发布密钥并递增 versionCode，即可覆盖升级。

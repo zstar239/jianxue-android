@@ -27,6 +27,7 @@ jobs:
         run: |
           bash scripts/dev.sh check
           bash scripts/dev.sh apk
+          bash scripts/dev.sh release-check
           bash scripts/dev.sh jvm
           python3 scripts/verify-artifacts.py
       - name: Archive corresponding source
@@ -34,5 +35,8 @@ jobs:
           python3 scripts/package-source.py
       - uses: actions/upload-artifact@v4
         with:
-          name: jianxue-android-dev
-          path: dist/
+          name: jianxue-build-checks
+          path: |
+            dist/*.json
+            dist/*-source.zip
+            dist/SHA256SUMS

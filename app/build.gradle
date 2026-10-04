@@ -8,8 +8,8 @@ android {
         applicationId 'org.jianxue.ime'
         minSdk 26
         targetSdk 35
-        versionCode 2
-        versionName '0.2.0-dev'
+        versionCode 3
+        versionName '0.2.0'
         ndk { abiFilters 'arm64-v8a', 'x86_64' }
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
@@ -17,8 +17,24 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+    signingConfigs {
+        if (System.getenv('JIANXUE_RELEASE_KEYSTORE')) {
+            release {
+                storeFile file(System.getenv('JIANXUE_RELEASE_KEYSTORE'))
+                storePassword System.getenv('JIANXUE_RELEASE_STORE_PASSWORD')
+                keyAlias System.getenv('JIANXUE_RELEASE_KEY_ALIAS') ?: 'jianxue'
+                keyPassword System.getenv('JIANXUE_RELEASE_KEY_PASSWORD')
+            }
+        }
+    }
     buildTypes {
-        release { minifyEnabled false }
+        release {
+            minifyEnabled false
+            debuggable false
+            if (System.getenv('JIANXUE_RELEASE_KEYSTORE')) {
+                signingConfig signingConfigs.release
+            }
+        }
     }
     if (System.getenv('JIANXUE_DEBUG_KEYSTORE')) {
         signingConfigs.debug.storeFile = file(System.getenv('JIANXUE_DEBUG_KEYSTORE'))
@@ -39,8 +55,8 @@ tasks.register('prepareAssets', Sync) {
     from('../vendor/qingjian/assets/wubi') { include 'wubi86.tsv' }
     from('../vendor/qingjian/assets/emoji') { include 'emoji-zh.tsv' }
     from('../vendor/qingjian/assets/levels') { include 'levels-*.tsv' }
-    from('../vendor/qingjian') { include 'LICENSE'; into 'licenses' }
-    from('..') { include 'NOTICE.md'; into 'licenses' }
+    from('../vendor/qingjian/LICENSE') { into 'licenses' }
+    from('../NOTICE.md') { into 'licenses' }
     from('../third-party/rust') {
         include '**/LICENSE*', '**/COPYING*', '**/NOTICE*', '**/COPYRIGHT*'
         into 'licenses/rust'

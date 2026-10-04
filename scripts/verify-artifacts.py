@@ -5,9 +5,14 @@ import hashlib
 import json
 import struct
 import zipfile
+import argparse
 
 root = Path(__file__).resolve().parent.parent
-apk = root / "dist/jianxue-debug.apk"
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("apk", nargs="?", default="dist/jianxue-debug.apk")
+parser.add_argument("--output", default="dist/artifact-verification.json")
+args = parser.parse_args()
+apk = root / args.apk
 result = {"apk": apk.name, "abis": [], "formal_resources": True}
 with zipfile.ZipFile(apk) as bundle:
     for resource in ["dict.qj", "lm.qj", "model.qjm", "glossary-en.qj", "glossary-ja.qj", "glossary-es.qj", "licenses/LICENSE", "licenses/NOTICE.md"]:
@@ -38,5 +43,5 @@ with zipfile.ZipFile(apk) as bundle:
             assert entry.compress_type == zipfile.ZIP_STORED and data_offset % 16384 == 0, (abi, data_offset)
             result["abis"].append({"abi": abi, "elf_alignments": alignments, "zip_offset": data_offset,
                                   "sha256": hashlib.sha256(code).hexdigest(), "same_unstripped_file": code == expected})
-(root / "dist/artifact-verification.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
+(root / args.output).write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
 print("APK 资源、JNI 导出、两种 ABI 的 ELF/ZIP 16 KB 对齐已验证。")

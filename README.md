@@ -2,13 +2,13 @@
 
 基于 [青简 / Qingjian](https://github.com/qingjian-team/qingjian) 的开源 Android 输入法，复用原项目的 Rust 引擎、正式词库、译词与本地整句模型，为安卓实现日常中文输入与候选译词学习。
 
-这是独立移植，使用自己的名称与图标，不代表青简官方。当前为 **0.2.0-dev 开发预览版**，支持 **Android 8.0+，ARM64 与 x86_64**。代码采用 **GPL-3.0-or-later**；数据保留各自许可，详见 [NOTICE](NOTICE.md)。
+这是独立移植，使用自己的名称与图标，不代表青简官方。当前版本为 **0.2.0**，支持 **Android 8.0+，ARM64 与 x86_64**。代码采用 **GPL-3.0-or-later**；数据保留各自许可，详见 [NOTICE](NOTICE.md)。
 
 ## 安装与使用
 
-[下载 0.2.0-dev 开发预览版](https://github.com/zstar239/jianxue-android/releases/tag/v0.2.0-dev) · [直接下载 APK](https://github.com/zstar239/jianxue-android/releases/download/v0.2.0-dev/jianxue-debug.apk) · [使用说明](docs/USER.md)
+[下载 0.2.0 正式发布版](https://github.com/zstar239/jianxue-android/releases/tag/v0.2.0) · [直接下载 APK](https://github.com/zstar239/jianxue-android/releases/download/v0.2.0/jianxue-0.2.0-release.apk) · [使用说明](docs/USER.md)
 
-Release 提供 APK、包含第三方依赖的对应源码包、SHA-256 校验值和验证记录。当前 APK 使用调试签名，适合体验和反馈；安装后首次启动会加载词库与模型。
+Release 提供使用独立发布证书签名、关闭调试的 APK，以及包含第三方依赖的对应源码包、SHA-256 校验值和验证记录。安装后首次启动会加载词库与模型。已安装此前调试版的用户需先导出需要保留的生词，再卸载调试版后安装；后续正式版本继续使用同一发布签名。
 
 <p>
   <img src="docs/images/android-nine-key.png" width="240" alt="九键拼音与候选译词">
@@ -18,7 +18,7 @@ Release 提供 APK、包含第三方依赖的对应源码包、SHA-256 校验值
 
 本地交付文件在 `dist/`：
 
-- `jianxue-debug.apk`：可安装的开发 APK，使用调试签名。
+- `jianxue-0.2.0-release.apk`：可安装的正式构建，使用独立发布签名。
 - `jianxue-android-0.2.0-source.zip`：对应源码、固定版本上游、Rust 第三方源码、许可与构建脚本。
 - `SHA256SUMS`：APK 和源码包校验值。
 - `artifact-verification.json`：正式资源、JNI 和 16 KB 对齐检查结果。
@@ -78,7 +78,7 @@ bash scripts/dev.sh jvm
 
 尚未提供 ARMv7 / 32 位版本和 Windows 原生构建脚本。词库导入与上游一样不展开 Rime import_tables 或自定义列顺序；移动端没有桌面快捷键录制和系统文本替换。移动端尚未实现语音、手写和滑行输入，没有桌面主题编辑器或自动更新器。九键先用词库与拼音路径解析，沿用上游本地词图整句转换；停顿后的神经重排与云联想目前用于二十六键，九键输入准确率仍需要更多语料与实机验证。
 
-云服务接入代码已实现，真实服务的质量、延迟与协议差异仍需用自己的密钥测试。开发 APK 和模拟器验证不能覆盖各手机厂商、所有第三方编辑器或 Android 16 KB 实机。发布前需要更多真机测试和维护者管理的正式签名。
+云服务接入代码已实现，真实服务的质量、延迟与协议差异仍需用自己的密钥测试。自动检查和模拟器验证不能覆盖各手机厂商、所有第三方编辑器或 Android 16 KB 实机，欢迎提供真机兼容性反馈。
 
 分发 APK 时应同时提供对应源码和构建说明，保留上游与数据的版权、许可和署名。
 

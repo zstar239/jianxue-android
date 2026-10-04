@@ -1,5 +1,28 @@
 # 验证记录
 
+## 0.2.0 正式 Release 构建
+
+验证日期：2026-10-04。Android versionCode 为 3，功能沿用 0.2.0-dev，应用标题同步版本号。
+
+| 检查 | 结果 |
+| --- | --- |
+| ARM64 / x86_64 原生 release 编译 | 通过 |
+| Rust 格式、Clippy 及真实引擎回归 | 17 项通过 |
+| Release Java 单元测试 | 7 项通过 |
+| Android assembleRelease 与 Release lint | 通过，No issues found |
+| 实际 APK 的版本与调试标志 | 0.2.0 / versionCode 3，debuggable 为 false |
+| apksigner 与维护者发布证书一致性 | 通过，使用独立发布证书 |
+| 真实 JVM 加载 JNI、正式资源与模型 | 九键、连续输入、译词、上屏、过期帧与线程归属通过 |
+| ELF 与 APK ZIP 的 16 KB 页对齐 | 两种 ABI 均通过 |
+
+发布证书 SHA-256：`51168d0b588453813c564278d223ece3402794e55befb9cf70df01a7899ab269`。发布脚本检查 APK 内的 Git 提交元数据与当前干净提交一致，源码包再逐项核对公开仓库文件和 330 个注册表依赖的包校验值。
+
+正式验证包包含 `release-verification.json`、`release-signature.txt`、资源与布局检查、Release 单元测试 XML、Rust 和 JNI 输出及源码校验。发布私钥与密码保存在本地私人目录，不属于公开记录。
+
+下方 8 项 Android 设备测试属于此前的同功能调试构建，本次没有把它们记为正式签名 APK 的新设备测试。此次未改动输入功能逻辑，重新运行了 Release 单元测试、Rust 回归、真实资源 JNI 和 APK 签名 / 版本 / 布局检查；厂商编辑器、真实云服务、物理触感与 16 KB 实机仍需后续验证。
+
+## 0.2.0-dev 功能交互回归记录
+
 验证日期：2026-10-04。此记录针对 **0.2.0-dev** 开发预览版，不代表全部手机与编辑器兼容。
 
 | 检查 | 结果 |

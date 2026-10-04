@@ -13,3 +13,4 @@ vendor/qingjian/target/
 third-party/rust/
 __pycache__/
 *.pyc
+.release-signing/
